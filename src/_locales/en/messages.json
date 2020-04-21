@@ -1,0 +1,14 @@
+{
+    "appName": {
+        "message": "Amazon Relay Auto",
+        "description": "The name of the react extension."
+    },
+    "appDescription": {
+        "message": "Amazon Relay Auto",
+        "description": "The description of the extension."
+    },
+    "btnTooltip": {
+        "message": "Ext Starter",
+        "description": "Tooltip for the button."
+    }
+}

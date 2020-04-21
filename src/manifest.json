@@ -1,0 +1,35 @@
+{
+    "name": "__MSG_appName__",
+    "author": "WebDEV",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "__MSG_appDescription__",
+    "icons": {
+        "16": "assets/icons/icon-16.png",
+        "24": "assets/icons/icon-24.png",
+        "64": "assets/icons/icon-64.png",
+        "128": "assets/icons/icon-128.png"
+    },
+    "default_locale": "en",
+    "content_scripts": [
+        {
+            "matches": ["*://relay.amazon.com/*"],
+            "js": ["content/content.js"]
+        }
+    ],
+    "background": {
+        "scripts": ["background/background.js", "hotreload/hotreload.js"],
+        "persistent": true
+    },
+    "permissions": ["storage", "*://relay.amazon.com/*"],
+    "options_ui": {
+        "page": "options/index.html"
+    },
+    "page_action": {
+        "default_icon": {
+            "16": "assets/icons/icon-16.png",
+            "48": "assets/icons/icon-48.png"
+        },
+        "default_title": "Amazon Relay Auto"
+    }
+}
