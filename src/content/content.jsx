@@ -4,19 +4,101 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ext from "../utils/ext";
 
-ext.runtime.onMessage.addListener(onRequest);
+const startAutobook = () => {
+    var script = document.createElement("script");
+    script.textContent = `
+        var count = document.querySelector(".summary-text").innerText;
 
-class Main extends React.Component {
-    render() {
-        return (
-            <div className="my-extension">
-                <h1>Hello world - My first Extension</h1>
-            </div>
-        );
+        console.log("~~~~~~~~~~~ count", count);
+
+        var oldXHROpen = window.XMLHttpRequest.prototype.open;
+        window.XMLHttpRequest.prototype.open = function(
+            method,
+            url,
+            async,
+            user,
+            password
+        ) {
+            this.addEventListener("load", function() {
+                console.log("~~~~~~~~~~~", url);
+                if (url.startsWith("/api/tours/loadboard")) {
+                    if (
+                        count ===
+                        document.querySelector(".summary-text").innerText
+                    ) {
+                        document.querySelector(".fa.fa-refresh").click();
+                    } else {
+                        count = document.querySelector(".summary-text")
+                            .innerText;
+                        registerBookClicks();
+                        highlightExtras();
+                    }
+                }
+            });
+
+            return oldXHROpen.apply(this, arguments);
+        };
+
+        function registerBookClicks() {
+            var bookBtns = document.querySelectorAll(
+                ".tour-header__accept-button--loadboard button.btn"
+            );
+            bookBtns[0].click();
+            setTimeout(()=>{
+                const confirmBtn = document.querySelector(
+                    "button.confirmation-body__footer__confirm-button"
+                );
+                confirmBtn.click();
+            }, 500)
+        }
+
+        function highlightExtras() {
+            const listingCards = document.querySelectorAll(
+                ".tour-listing__card .row.-run-stop__row span.tour-card__stop-number-circle"
+            );
+            Array.from(listingCards)
+                .filter(item => {
+                    return parseInt(item.innerText) > 4;
+                })
+                .each(item => {
+                    item.parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .parentNode()
+                        .setAttribute("style", "background:#f0f;");
+                });
+        }
+        `;
+    (document.head || document.documentElement).appendChild(script);
+    script.remove();
+};
+
+const Main = () => {
+    startAutobook();
+    return <></>;
+};
+
+const documentReady = () => {
+    // good to go!
+    console.log("~~~~~~~~ ready");
+    const loadBoard = document.querySelector("div.loadboard-reload");
+    loadBoard.setAttribute("style", "display: flex;align-items: center;");
+    const app = document.createElement("div");
+    app.id = "my-extension-root";
+    loadBoard.insertBefore(app, loadBoard.childNodes[0]);
+    ReactDOM.render(<Main />, app);
+};
+
+// Polling for the sake of my intern tests
+var interval = setInterval(function() {
+    if (document.readyState === "complete") {
+        clearInterval(interval);
+        documentReady();
     }
-}
-
-const app = document.createElement("div");
-app.id = "my-extension-root";
-document.body.appendChild(app);
-ReactDOM.render(<Main />, app);
+}, 100);

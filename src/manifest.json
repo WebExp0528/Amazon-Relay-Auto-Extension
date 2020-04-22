@@ -13,7 +13,7 @@
     "default_locale": "en",
     "content_scripts": [
         {
-            "matches": ["*://relay.amazon.com/*"],
+            "matches": ["*://relay.amazon.com/tours/loadboard*"],
             "js": ["content/content.js"]
         }
     ],
