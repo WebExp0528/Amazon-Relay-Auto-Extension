@@ -26,12 +26,11 @@ const startAutobook = () => {
                         count ===
                         document.querySelector(".summary-text").innerText
                     ) {
-                        document.querySelector(".fa.fa-refresh").click();
+                        document.querySelector('.fa.fa-refresh.reload-icon').click();
                     } else {
                         count = document.querySelector(".summary-text")
                             .innerText;
                         registerBookClicks();
-                        highlightExtras();
                     }
                 }
             });
@@ -49,34 +48,13 @@ const startAutobook = () => {
                     "button.confirmation-body__footer__confirm-button"
                 );
                 confirmBtn.click();
-            }, 500)
-        }
-
-        function highlightExtras() {
-            const listingCards = document.querySelectorAll(
-                ".tour-listing__card .row.-run-stop__row span.tour-card__stop-number-circle"
-            );
-            Array.from(listingCards)
-                .filter(item => {
-                    return parseInt(item.innerText) > 4;
-                })
-                .each(item => {
-                    item.parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .parentNode()
-                        .setAttribute("style", "background:#f0f;");
-                });
+                document.querySelector('.fa.fa-refresh.reload-icon').click();
+            }, 100);
         }
         `;
     (document.head || document.documentElement).appendChild(script);
     script.remove();
+    document.querySelector(".fa.fa-refresh.reload-icon").click();
 };
 
 const Main = () => {
