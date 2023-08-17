@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "",
     "main": "webpack.config.js",
-    "scripts": {
+    "scri
         "test": "karma start",
         "start": "webpack --config webpack.config.dev.js",
         "watch-dev": "webpack --config webpack.config.dev.js --watch",
